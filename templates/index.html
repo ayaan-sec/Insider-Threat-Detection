@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insider Threat Detection</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>Insider Threat Detection</h1>
+            <p>Analyze logon data to identify suspicious after-hours logins</p>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Step 1: Upload Section -->
+            <section class="section upload-section">
+                <h2>Step 1: Upload Logon Data</h2>
+                <div class="upload-area" id="uploadArea">
+                    <input type="file" id="csvFile" accept=".csv" style="display: none;">
+                    <div class="upload-prompt">
+                        <p>Click to select or drag & drop your CSV file</p>
+                        <small>Expected columns: user, time</small>
+                    </div>
+                </div>
+                <button class="btn btn-primary" id="analyzeBtn" disabled>Analyze Data</button>
+                <div id="uploadStatus"></div>
+            </section>
+
+            <!-- Step 2: Summary Section -->
+            <section class="section summary-section" id="summarySection" style="display: none;">
+                <h2>Analysis Summary</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalRecords">0</div>
+                        <div class="stat-label">Total Records</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalUsers">0</div>
+                        <div class="stat-label">Total Users</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value alert" id="suspiciousUsers">0</div>
+                        <div class="stat-label">Suspicious Users</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value alert" id="suspiciousDays">0</div>
+                        <div class="stat-label">Suspicious Days</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Step 3: Top Threats Section -->
+            <section class="section threats-section" id="threatsSection" style="display: none;">
+                <h2>🚩 Top Suspicious User-Days</h2>
+                <div class="table-wrapper">
+                    <table class="data-table" id="topDaysTable">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Date</th>
+                                <th>Total Logins</th>
+                                <th>After-Hours</th>
+                                <th>Ratio</th>
+                                <th>Risk Score</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Step 4: Top Users Section -->
+            <section class="section users-section" id="usersSection" style="display: none;">
+                <h2>Top Suspicious Users</h2>
+                <div class="table-wrapper">
+                    <table class="data-table" id="topUsersTable">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Suspicious Days</th>
+                                <th>Avg Ratio</th>
+                                <th>Total After-Hours Logins</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Step 5: User Timeline Section -->
+            <section class="section timeline-section" id="timelineSection" style="display: none;">
+                <h2>User Timeline Analysis</h2>
+                <div class="timeline-controls">
+                    <label for="userSelect">Select User:</label>
+                    <select id="userSelect" class="form-control">
+                        <option value="">-- Choose a user --</option>
+                    </select>
+                </div>
+                <div id="timelineContainer" style="display: none;">
+                    <div class="timeline-stats">
+                        <div class="stat-box">
+                            <span class="label">Average Risk Score:</span>
+                            <span class="value" id="avgRiskScore">-</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="label">Average After-Hours Ratio:</span>
+                            <span class="value" id="avgRatio">-</span>
+                        </div>
+                    </div>
+                    <canvas id="timelineChart" height="80"></canvas>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="spinner" style="display: none;">
+        <div class="spinner-content">
+            <p>Analyzing data...</p>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
